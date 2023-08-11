@@ -52,28 +52,8 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
-function NavBar({ moviesCount }) {
-  const [query, setQuery] = useState('');
-
-  return (
-    <nav className="nav-bar">
-      <Logo />
-      <Search query={query} setQuery={setQuery} />
-      <NumResult moviesCount={moviesCount} />
-    </nav>
-  );
-}
-
-function Search({ query, setQuery }) {
-  return (
-    <input
-      className="search"
-      type="text"
-      placeholder="Search movies..."
-      value={query}
-      onChange={(e) => setQuery(e.target.value)}
-    />
-  );
+function NavBar({ children }) {
+  return <nav className="nav-bar">{children}</nav>;
 }
 
 function Logo() {
@@ -85,6 +65,20 @@ function Logo() {
   );
 }
 
+function Search() {
+  const [query, setQuery] = useState('');
+
+  return (
+    <input
+      className="search"
+      type="text"
+      placeholder="Search movies..."
+      value={query}
+      onChange={(e) => setQuery(e.target.value)}
+    />
+  );
+}
+
 function NumResult({ moviesCount }) {
   return (
     <p className="num-results">
@@ -92,16 +86,12 @@ function NumResult({ moviesCount }) {
     </p>
   );
 }
-function Main({ movies }) {
-  return (
-    <main className="main">
-      <ListBox movies={movies} />
-      <WatchedBox />
-    </main>
-  );
+
+function Main({ children }) {
+  return <main className="main">{children}</main>;
 }
 
-function ListBox({ movies }) {
+function ListBox({ children }) {
   const [isOpen1, setIsOpen1] = useState(true);
 
   return (
@@ -112,7 +102,7 @@ function ListBox({ movies }) {
       >
         {isOpen1 ? '–' : '+'}
       </button>
-      {isOpen1 && <MovieList movies={movies} />}
+      {isOpen1 && children}
     </div>
   );
 }
@@ -229,8 +219,17 @@ export default function App() {
 
   return (
     <>
-      <NavBar moviesCount={movies.length} />
-      <Main movies={movies} />
+      <NavBar>
+        <Logo />
+        <Search />
+        <NumResult moviesCount={movies.length} />
+      </NavBar>
+      <Main>
+        <ListBox>
+          <MovieList movies={movies} />
+        </ListBox>
+        <WatchedBox />
+      </Main>
     </>
   );
 }
