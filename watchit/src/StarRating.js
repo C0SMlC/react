@@ -16,7 +16,9 @@ const lineStyle = {
   margin: '0',
 };
 const StarRating = ({ maxRating }) => {
-  const [clickedStar, setClickedStar] = useState(1);
+  const [clickedStar, setClickedStar] = useState(0);
+  const [tempRating, settempRating] = useState(0);
+
   const handleStarClick = (rating) => setClickedStar(rating);
   return (
     <div style={containerStyle}>
@@ -25,12 +27,13 @@ const StarRating = ({ maxRating }) => {
           <Star
             key={i}
             onRate={() => handleStarClick(i + 1)}
-            isRated={i + 1 <= clickedStar}
+            onHoverIn={() => settempRating(i + 1)}
+            onHoverOut={() => settempRating(0)}
+            isRated={i + 1 <= clickedStar || i + 1 <= tempRating}
           />
         ))}
       </div>
-      <p style={lineStyle}>{clickedStar}</p>
-      <p style={lineStyle}>{maxRating}</p>
+      <p style={lineStyle}>{clickedStar || tempRating || ''}</p>
     </div>
   );
 };
@@ -42,8 +45,14 @@ const starStyle = {
   cursor: 'pointer',
 };
 
-const Star = ({ onRate, isRated }) => (
-  <span role="button" style={starStyle} onClick={onRate}>
+const Star = ({ onRate, isRated, onHoverIn, onHoverOut }) => (
+  <span
+    role="button"
+    style={starStyle}
+    onClick={onRate}
+    onMouseEnter={onHoverIn}
+    onMouseLeave={onHoverOut}
+  >
     {isRated ? (
       <svg
         xmlns="http://www.w3.org/2000/svg"
