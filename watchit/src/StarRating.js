@@ -15,6 +15,7 @@ const StarRating = ({
   maxRating,
   color = '#fcc419',
   size = 48,
+  setMovieRating,
   messages = [],
 }) => {
   const [clickedStar, setClickedStar] = useState(0);
@@ -27,7 +28,10 @@ const StarRating = ({
     fontSize: `${size / 1.5}px`,
   };
 
-  const handleStarClick = (rating) => setClickedStar(rating);
+  const handleStarClick = (rating) => {
+    setClickedStar(rating);
+    setMovieRating(rating);
+  };
   return (
     <div style={containerStyle}>
       <div style={StarContainerStyle}>
