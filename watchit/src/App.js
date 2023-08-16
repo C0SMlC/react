@@ -195,19 +195,29 @@ const API = '584187b4';
 export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState(tempWatchedData);
+  const [query, setQuery] = useState('Inception');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(function () {
     async function fetchMovies() {
+      setIsLoading(true);
       const res = await fetch(
-        `https://www.omdbapi.com/?apikey=${API}&s=Inception`
+        `https://www.omdbapi.com/?apikey=${API}&s=${query}`
       );
 
       const data = await res.json();
       setMovies(data.Search);
+      setIsLoading(false);
     }
 
     fetchMovies();
   }, []);
+
+  function Loader(){
+    return(
+      <p className='loader'>Loading...</p>
+    )
+  }
 
   return (
     <>
@@ -217,9 +227,7 @@ export default function App() {
         <NumResult moviesCount={movies.length} />
       </NavBar>
       <Main>
-        <Box>
-          <MovieList movies={movies} />
-        </Box>
+        <Box>{isLoading ? <Loader /> : <MovieList movies={movies} />}</Box>
         <Box>
           <WatchedSummary watched={watched} />
           <WatchedMovieList watched={watched} />
