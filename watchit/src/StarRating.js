@@ -15,11 +15,11 @@ const StarRating = ({
   maxRating,
   color = '#fcc419',
   size = 48,
-  setMovieRating,
+  OnsetMovieRating,
   messages = [],
 }) => {
   const [clickedStar, setClickedStar] = useState(0);
-  const [tempRating, settempRating] = useState(0);
+  const [tempRating, settempRating]  = useState(0);
 
   const lineStyle = {
     lineHeight: '1',
@@ -30,7 +30,7 @@ const StarRating = ({
 
   const handleStarClick = (rating) => {
     setClickedStar(rating);
-    setMovieRating(rating);
+    OnsetMovieRating || OnsetMovieRating(rating);
   };
   return (
     <div style={containerStyle}>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import './index.css';
 
@@ -104,6 +104,28 @@ function Box({ children }) {
   );
 }
 
+// function WatchedBox() {
+//   const [watched, setWatched] = useState(tempWatchedData);
+//   const [isOpen2, setIsOpen2] = useState(true);
+
+//   return (
+//     <div className="box">
+//       <button
+//         className="btn-toggle"
+//         onClick={() => setIsOpen2((open) => !open)}
+//       >
+//         {isOpen2 ? '–' : '+'}
+//       </button>
+//       {isOpen2 && (
+//         <>
+//           <WatchedSummary watched={watched} />
+//           <WatchedMovieList watched={watched} />
+//         </>
+//       )}
+//     </div>
+//   );
+// }
+
 function MovieList({ movies }) {
   return (
     <ul className="list">
@@ -190,17 +212,9 @@ function WatchedMovieListItem({ movie }) {
     </li>
   );
 }
-
-const API = '584187b4';
 export default function App() {
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
-
-  useEffect(function () {
-    fetch(`http://www.omdbapi.com/?apikey=${API}&s=inception`)
-      .then((res) => res.json())
-      .then((data) => setMovies(data.Search));
-  }, []);
 
   return (
     <>
@@ -210,6 +224,15 @@ export default function App() {
         <NumResult moviesCount={movies.length} />
       </NavBar>
       <Main>
+        {/* <Box element={<MovieList movies={movies} /> } />
+        <Box elemrnt = {
+        <>
+          <WatchedSummary watched={watched} />
+          <WatchedMovieList watched={watched} />
+        </>
+        }
+        /> */}
+
         <Box>
           <MovieList movies={movies} />
         </Box>
