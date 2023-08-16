@@ -197,9 +197,16 @@ export default function App() {
   const [watched, setWatched] = useState(tempWatchedData);
 
   useEffect(function () {
-    fetch(`http://www.omdbapi.com/?apikey=${API}&s=inception`)
-      .then((res) => res.json())
-      .then((data) => setMovies(data.Search));
+    async function fetchMovies() {
+      const res = await fetch(
+        `https://www.omdbapi.com/?apikey=${API}&s=Inception`
+      );
+
+      const data = await res.json();
+      setMovies(data.Search);
+    }
+
+    fetchMovies();
   }, []);
 
   return (
