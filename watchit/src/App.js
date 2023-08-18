@@ -65,9 +65,7 @@ function Logo() {
   );
 }
 
-function Search() {
-  const [query, setQuery] = useState('');
-
+function Search({ query, setQuery }) {
   return (
     <input
       className="search"
@@ -96,7 +94,7 @@ function Box({ children }) {
 
   return (
     <div className="box">
-      <button className="btn-toggle" onClick={() => setIsOpen((open) => !open)}>
+      <button className="btn-toggle" OnClick={() => setIsOpen((open) => !open)}>
         {isOpen ? '–' : '+'}
       </button>
       {isOpen && children}
@@ -104,19 +102,23 @@ function Box({ children }) {
   );
 }
 
-function MovieList({ movies }) {
+function MovieList({ movies, onHandleMovieClick }) {
   return (
-    <ul className="list">
+    <ul className="list list-movies">
       {movies?.map((movie) => (
-        <MovieListitem movie={movie} key={movie.imdbID} />
+        <MovieListitem
+          movie={movie}
+          key={movie.imdbID}
+          onHandleMovieClick={onHandleMovieClick}
+        />
       ))}
     </ul>
   );
 }
 
-function MovieListitem({ movie }) {
+function MovieListitem({ movie, onHandleMovieClick }) {
   return (
-    <li>
+    <li onClick={() => onHandleMovieClick(movie.imdbID)}>
       <img src={movie.Poster} alt={`${movie.Title} poster`} />
       <h3>{movie.Title}</h3>
       <div>
@@ -126,6 +128,17 @@ function MovieListitem({ movie }) {
         </p>
       </div>
     </li>
+  );
+}
+
+function MovieDetail({ selectedId, onCloseMovieClick }) {
+  return (
+    <div className="details">
+      <button className="btn-back" onClick={onCloseMovieClick}>
+        &larr;
+      </button>
+      {selectedId}
+    </div>
   );
 }
 
@@ -195,42 +208,96 @@ const API = '584187b4';
 export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState(tempWatchedData);
-  const [query, setQuery] = useState('Inception');
+  const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [selectedId, setSelectedId] = useState(null);
 
-  useEffect(function () {
-    async function fetchMovies() {
-      setIsLoading(true);
-      const res = await fetch(
-        `https://www.omdbapi.com/?apikey=${API}&s=${query}`
-      );
+  useEffect(
+    function () {
+      async function fetchMovies() {
+        try {
+          setIsLoading(true);
+          setError('');
 
-      const data = await res.json();
-      setMovies(data.Search);
-      setIsLoading(false);
-    }
+          const res = await fetch(
+            `https://www.omdbapi.com/?apikey=${API}&s=${query}`
+          );
 
-    fetchMovies();
-  }, []);
+          if (!res.ok) throw new Error('Something Went Wrong :(');
 
-  function Loader(){
-    return(
-      <p className='loader'>Loading...</p>
-    )
+          const data = await res.json();
+
+          console.log(data);
+          console.log(data.Response === 'False');
+          if (data.Response === 'False') {
+            throw new Error('No Movies Found!');
+          }
+
+          setMovies(data.Search);
+        } catch (error) {
+          setError(error.message);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+      if (query.length > 3) {
+        fetchMovies();
+      }
+    },
+    [query]
+  );
+
+  function Loader() {
+    return <p className="loader">Loading...</p>;
+  }
+
+  function ShowError({ error }) {
+    return (
+      <p className="error">
+        <span>{error} ❌</span>
+      </p>
+    );
+  }
+
+  function onHandleMovieClick(id) {
+    setSelectedId((setSelectedId) => (setSelectedId === id ? null : id));
+  }
+  function onCloseMovieClick(id) {
+    setSelectedId(null);
   }
 
   return (
     <>
       <NavBar>
         <Logo />
-        <Search />
+        <Search query={query} setQuery={setQuery} />
         <NumResult moviesCount={movies.length} />
       </NavBar>
       <Main>
-        <Box>{isLoading ? <Loader /> : <MovieList movies={movies} />}</Box>
         <Box>
-          <WatchedSummary watched={watched} />
-          <WatchedMovieList watched={watched} />
+          {isLoading && <Loader />}
+          {!isLoading && !error && (
+            <MovieList
+              movies={movies}
+              onHandleMovieClick={onHandleMovieClick}
+            />
+          )}
+
+          {error && <ShowError error={error} />}
+        </Box>
+        <Box>
+          {selectedId ? (
+            <MovieDetail
+              selectedId={selectedId}
+              onCloseMovieClick={onCloseMovieClick}
+            />
+          ) : (
+            <>
+              <WatchedSummary watched={watched} />
+              <WatchedMovieList watched={watched} />
+            </>
+          )}
         </Box>
       </Main>
     </>
