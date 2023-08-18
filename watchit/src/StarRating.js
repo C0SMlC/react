@@ -15,11 +15,11 @@ const StarRating = ({
   maxRating,
   color = '#fcc419',
   size = 48,
-  OnsetMovieRating,
+  OnSetMovieRating,
   messages = [],
 }) => {
   const [clickedStar, setClickedStar] = useState(0);
-  const [tempRating, settempRating]  = useState(0);
+  const [tempRating, settempRating] = useState(0);
 
   const lineStyle = {
     lineHeight: '1',
@@ -30,7 +30,7 @@ const StarRating = ({
 
   const handleStarClick = (rating) => {
     setClickedStar(rating);
-    OnsetMovieRating || OnsetMovieRating(rating);
+    OnSetMovieRating || OnSetMovieRating(rating);
   };
   return (
     <div style={containerStyle}>
@@ -42,6 +42,7 @@ const StarRating = ({
             onHoverIn={() => settempRating(i + 1)}
             onHoverOut={() => settempRating(0)}
             isRated={i + 1 <= clickedStar || i + 1 <= tempRating}
+            size={size}
           />
         ))}
       </div>
