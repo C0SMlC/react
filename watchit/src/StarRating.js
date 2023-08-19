@@ -47,7 +47,6 @@ const StarRating = ({
         ))}
       </div>
       <p style={lineStyle}>
-        {console.log(messages[tempRating - 1])}
         {messages.length === maxRating
           ? messages[tempRating - 1] || messages[clickedStar - 1]
           : clickedStar || tempRating || ''}

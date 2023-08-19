@@ -186,6 +186,19 @@ function MovieDetail({ selectedId, onCloseMovieClick, watched, onAddWatched }) {
     [selectedId]
   );
 
+  useEffect(function () {
+    function callBack(e) {
+      if (e.code === 'Escape') {
+        onCloseMovieClick();
+      }
+    }
+    document.addEventListener('keydown', callBack);
+
+    return function () {
+      document.removeEventListener('keydown', callBack);
+    };
+  }, []);
+
   useEffect(
     function () {
       document.title = title ? `Movie | ${title}` : 'WatchIt';
