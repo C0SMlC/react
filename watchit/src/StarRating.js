@@ -30,7 +30,7 @@ const StarRating = ({
 
   const handleStarClick = (rating) => {
     setClickedStar(rating);
-    OnSetMovieRating || OnSetMovieRating(rating);
+    OnSetMovieRating(rating);
   };
   return (
     <div style={containerStyle}>
