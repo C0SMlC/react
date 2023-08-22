@@ -70,8 +70,14 @@ function Search({ query, setQuery }) {
   const inputEl = useRef(null);
 
   useEffect(() => {
-    
     inputEl.current.focus();
+
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Enter' && document.activeElement !== inputEl.current) {
+        inputEl.current.focus();
+        setQuery('');
+      }
+    });
   }, []);
   return (
     <input
