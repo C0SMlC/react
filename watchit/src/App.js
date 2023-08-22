@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import StarRating from './StarRating';
 
 import './index.css';
@@ -67,6 +67,12 @@ function Logo() {
 }
 
 function Search({ query, setQuery }) {
+  const inputEl = useRef(null);
+
+  useEffect(() => {
+    
+    inputEl.current.focus();
+  }, []);
   return (
     <input
       className="search"
@@ -74,6 +80,7 @@ function Search({ query, setQuery }) {
       placeholder="Search movies..."
       value={query}
       onChange={(e) => setQuery(e.target.value)}
+      ref={inputEl}
     />
   );
 }
@@ -362,6 +369,10 @@ export default function App() {
   const [error, setError] = useState('');
   const [selectedId, setSelectedId] = useState(null);
 
+  if (watched === null) {
+    setWatched([]);
+  }
+
   function onHandleMovieClick(id) {
     setSelectedId((setSelectedId) => (setSelectedId === id ? null : id));
   }
@@ -384,6 +395,7 @@ export default function App() {
     },
     [watched]
   );
+
   useEffect(
     function () {
       const controller = new AbortController();
@@ -412,13 +424,15 @@ export default function App() {
           setMovies(data.Search);
           setError('');
         } catch (error) {
-          if (error.name != 'AbortError') setError(error.message);
+          if (error.name !== 'AbortError') setError(error.message);
         } finally {
           setIsLoading(false);
         }
       }
       if (query.length > 3) {
         fetchMovies();
+      } else {
+        setMovies([]);
       }
 
       return function () {
