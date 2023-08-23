@@ -372,7 +372,7 @@ export default function App() {
   const [query, setQuery] = useState('');
   const [selectedId, setSelectedId] = useState(null);
 
-  const { movie, isLoading, error } = useMovies(query, onCloseMovieClick);
+  const { movies, isLoading, error } = useMovies(query, onCloseMovieClick);
 
   if (watched === null) {
     setWatched([]);
