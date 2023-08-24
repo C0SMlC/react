@@ -3,9 +3,10 @@ import { useMovies } from './useMovies';
 import StarRating from './StarRating';
 
 import './index.css';
+import { useLocalStorage } from './useLocalStorage';
 
 const tempMovieData = [
-  {
+  { 
     imdbID: 'tt1375666',
     Title: 'Inception',
     Year: '2010',
@@ -147,6 +148,7 @@ function MovieListitem({ movie, onHandleMovieClick }) {
 }
 
 function MovieDetail({ selectedId, onCloseMovieClick, watched, onAddWatched }) {
+  const API = '584187b4';
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [rating, onSetRating] = useState('');
@@ -365,10 +367,7 @@ function ShowError({ error }) {
 }
 
 export default function App() {
-  const [watched, setWatched] = useState(function () {
-    const res = localStorage.getItem('watched');
-    return JSON.parse(res);
-  });
+  const [watched, setWatched] = useLocalStorage([]);
   const [query, setQuery] = useState('');
   const [selectedId, setSelectedId] = useState(null);
 
@@ -393,13 +392,6 @@ export default function App() {
   function handleAddWatch(movie) {
     setWatched((watched) => [...watched, movie]);
   }
-
-  useEffect(
-    function () {
-      localStorage.setItem('watched', JSON.stringify(watched));
-    },
-    [watched]
-  );
 
   return (
     <>
