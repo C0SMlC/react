@@ -11,6 +11,7 @@ const initialState = {
   // 'loaading', 'error','ready','active','finished'
   status: 'loading',
   index: 0,
+  answer: null,
 };
 
 function reducer(state, action) {
@@ -32,12 +33,17 @@ function reducer(state, action) {
         ...state,
         status: 'active',
       };
+    case 'answer':
+      return {
+        ...state,
+        answer: action.payload,
+      };
     default:
       throw new Error('undefined action');
   }
 }
 function App() {
-  const [{ questions, status, index }, dispatch] = useReducer(
+  const [{ questions, status, index, answer }, dispatch] = useReducer(
     reducer,
     initialState
   );
@@ -53,6 +59,10 @@ function App() {
     dispatch({ type: 'startGame' });
   }
 
+  function handleAnswer(answer) {
+    dispatch({ type: 'answer', payload: answer });
+  }
+
   return (
     <div className="app">
       <Header />
@@ -65,7 +75,13 @@ function App() {
             handleClick={handleClick}
           />
         )}
-        {status === 'active' && <Question currentQuestion={questions[index]} />}
+        {status === 'active' && (
+          <Question
+            currentQuestion={questions[index]}
+            handleAnswer={handleAnswer}
+            answer={answer}
+          />
+        )}
       </Main>
     </div>
   );
