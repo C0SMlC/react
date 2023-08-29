@@ -1,6 +1,10 @@
 import { useEffect, useReducer } from 'react';
 import Header from './Header';
 import Main from './Main';
+import Loader from './Loader';
+import Error from './Error';
+import StartScreen from './StartScreen';
+import Question from './Question';
 
 const initialState = {
   questions: [],
@@ -13,7 +17,7 @@ function reducer(state, action) {
     case 'dataReceived':
       return {
         ...state,
-        data: action.payload,
+        questions: action.payload,
         status: 'ready',
       };
 
@@ -22,12 +26,17 @@ function reducer(state, action) {
         ...state,
         status: 'error',
       };
+    case 'startGame':
+      return {
+        ...state,
+        status: 'active',
+      };
     default:
       throw new Error('undefined action');
   }
 }
 function App() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
 
   useEffect(function () {
     fetch('http://localhost:5000/questions')
@@ -36,12 +45,23 @@ function App() {
       .catch((err) => dispatch({ type: 'dataFailed' }));
   }, []);
 
+  function handleClick() {
+    dispatch({ type: 'startGame' });
+  }
+
   return (
     <div className="app">
       <Header />
       <Main>
-        <p>1/15</p>
-        <p>Question 1</p>
+        {status === 'loading' && <Loader />}
+        {status === 'error' && <Error />}
+        {status === 'ready' && (
+          <StartScreen
+            numQuestions={questions.length}
+            handleClick={handleClick}
+          />
+        )}
+        {status === 'active' && <Question />}
       </Main>
     </div>
   );
