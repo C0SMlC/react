@@ -12,6 +12,7 @@ const initialState = {
   status: 'loading',
   index: 0,
   answer: null,
+  points: 0,
 };
 
 function reducer(state, action) {
@@ -34,9 +35,21 @@ function reducer(state, action) {
         status: 'active',
       };
     case 'answer':
+      const question = state.questions.at(state.index);
       return {
         ...state,
         answer: action.payload,
+        points:
+          question.correctOption === action.payload
+            ? state.points + question.points
+            : state.points,
+      };
+
+    case 'nextQuestion':
+      return {
+        ...state,
+        index: state.index + 1,
+        answer: null,
       };
     default:
       throw new Error('undefined action');
@@ -82,6 +95,15 @@ function App() {
             answer={answer}
           />
         )}
+
+        {answer !== null ? (
+          <button
+            className="btn btn-ui"
+            onClick={() => dispatch({ type: 'nextQuestion' })}
+          >
+            Next
+          </button>
+        ) : null}
       </Main>
     </div>
   );
