@@ -5,6 +5,8 @@ import Loader from './Loader';
 import Error from './Error';
 import StartScreen from './StartScreen';
 import Question from './Question';
+import Progress from './Progress';
+import FinishScreen from './FinishScreen';
 
 const initialState = {
   questions: [],
@@ -34,6 +36,11 @@ function reducer(state, action) {
         ...state,
         status: 'active',
       };
+    case 'finish':
+      return {
+        ...state,
+        status: 'finish',
+      };
     case 'answer':
       const question = state.questions.at(state.index);
       return {
@@ -56,10 +63,14 @@ function reducer(state, action) {
   }
 }
 function App() {
-  const [{ questions, status, index, answer }, dispatch] = useReducer(
+  const [{ questions, status, index, answer, points }, dispatch] = useReducer(
     reducer,
     initialState
   );
+
+  const maxPoints = questions.reduce((prev, next) => {
+    return prev + next.points;
+  }, 0);
 
   useEffect(function () {
     fetch('http://localhost:5000/questions')
@@ -89,14 +100,37 @@ function App() {
           />
         )}
         {status === 'active' && (
-          <Question
-            currentQuestion={questions[index]}
-            handleAnswer={handleAnswer}
-            answer={answer}
-          />
+          <>
+            <Progress
+              points={points}
+              index={index}
+              numQuestions={questions.length}
+              maxPoints={maxPoints}
+              answer={answer}
+            />
+            <Question
+              currentQuestion={questions[index]}
+              handleAnswer={handleAnswer}
+              answer={answer}
+            />
+          </>
+        )}
+        {status === 'finish' && (
+          <FinishScreen maxPoints={maxPoints} points={points} />
         )}
 
-        {answer !== null ? (
+        {answer !== null &&
+        status !== 'finish' &&
+        index === questions.length - 1 ? (
+          <button
+            className="btn btn-ui"
+            onClick={() => dispatch({ type: 'finish' })}
+          >
+            Finish
+          </button>
+        ) : null}
+
+        {answer !== null && index < questions.length - 1 ? (
           <button
             className="btn btn-ui"
             onClick={() => dispatch({ type: 'nextQuestion' })}
