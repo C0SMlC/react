@@ -7,6 +7,7 @@ import StartScreen from './StartScreen';
 import Question from './Question';
 import Progress from './Progress';
 import FinishScreen from './FinishScreen';
+import Button from './Button';
 
 const initialState = {
   questions: [],
@@ -40,6 +41,14 @@ function reducer(state, action) {
       return {
         ...state,
         status: 'finish',
+      };
+    case 'restart':
+      return {
+        ...state,
+        status: 'active',
+        index: 0,
+        answer: null,
+        points: 0,
       };
     case 'answer':
       const question = state.questions.at(state.index);
@@ -119,25 +128,13 @@ function App() {
           <FinishScreen maxPoints={maxPoints} points={points} />
         )}
 
-        {answer !== null &&
-        status !== 'finish' &&
-        index === questions.length - 1 ? (
-          <button
-            className="btn btn-ui"
-            onClick={() => dispatch({ type: 'finish' })}
-          >
-            Finish
-          </button>
-        ) : null}
-
-        {answer !== null && index < questions.length - 1 ? (
-          <button
-            className="btn btn-ui"
-            onClick={() => dispatch({ type: 'nextQuestion' })}
-          >
-            Next
-          </button>
-        ) : null}
+        <Button
+          answer={answer}
+          dispatch={dispatch}
+          maxQuestions={questions.length}
+          status={status}
+          index={index}
+        />
       </Main>
     </div>
   );
