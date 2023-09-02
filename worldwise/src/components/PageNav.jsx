@@ -1,11 +1,12 @@
 import { NavLink } from 'react-router-dom';
+import styles from './PageNav.module.css';
 
 function PageNav() {
   return (
-    <nav>
+    <nav className={styles.nav}>
       <ul>
         <li>
-            {/* Can use this link tag too, but NavLink is better because it highlights currently active tab with "active" class */}
+          {/* Can use this link tag too, but NavLink is better because it highlights currently active tab with "active" class */}
           {/* <Link to={'/'}>Home</Link> */}
 
           <NavLink to={'/'}>Home</NavLink>
