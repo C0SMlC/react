@@ -5,8 +5,16 @@ import Product from './pages/Product';
 import PageNotFound from './pages/PageNotFound';
 import Login from './pages/Login';
 import AppLayout from './pages/AppLayout';
+import CityList from './components/CityList';
+import { useEffect } from 'react';
 
 function App() {
+  const [cities. setCities] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    
+  },[])
   return (
     <BrowserRouter>
       <Routes>
@@ -15,8 +23,8 @@ function App() {
         <Route path="product" element={<Product />} />
         <Route path="login" element={<Login />} />
         <Route path="app" element={<AppLayout />}>
-          <Route index element={<h1>LIST</h1>} />
-          <Route path="cities" element={<p>List of cities</p>} />
+          <Route index element={<CityList />} />
+          <Route path="cities" element={<CityList />} />
           <Route path="countries" element={<p>List of countries</p>} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
