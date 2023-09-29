@@ -1,11 +1,16 @@
 import PropTypes from 'prop-types'; // Import PropTypes
 import Spinner from './Spinner';
 import CityItem from './CityItem';
+import Message from './Message';
 import styles from './CityList.module.css';
 
 function CityList({ cities, loading }) {
   if (loading) return <Spinner />;
-  console.log(cities);
+  if (!cities.length)
+    return (
+      <Message message="Empty Here, Try Adding A City By Clicking On The Map" />
+    );
+
   return (
     <ul className={styles.cityList}>
       {cities.map((city) => (
