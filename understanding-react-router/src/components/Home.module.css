@@ -1,0 +1,11 @@
+.heading {
+  padding: 2rem;
+}
+
+:global(.paragraph) {
+  padding: 2rem;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  color: red;
+}
