@@ -1,5 +1,5 @@
-import styles from './Button.module.css';
-import PropTypes from 'prop-types';
+import styles from "./Button.module.css";
+import PropTypes from "prop-types";
 function Button({ children, onClick, type }) {
   return (
     <button
