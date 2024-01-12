@@ -23,6 +23,7 @@ function City() {
   //   notes: 'My favorite city so far!',
   // };
   const { currentCity, fetchCity, isLoading } = useCities();
+  console.log(isLoading);
 
   const { cityName, emoji, date, notes } = currentCity;
 
@@ -32,9 +33,9 @@ function City() {
     fetchCity(id);
   }, [id]);
 
-  isLoading ? <Spinner /> : null;
-
-  return (
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <div className={styles.city}>
       <div className={styles.row}>
         <h6>City name</h6>
