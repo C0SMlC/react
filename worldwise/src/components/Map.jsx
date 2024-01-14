@@ -1,7 +1,7 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import propTypes from "prop-types";
 import { useEffect, useState } from "react";
+import propTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 
 import styles from "./Map.module.css";
 
@@ -9,18 +9,17 @@ import Button from "./Button";
 
 import { useCities } from "../contexts/CitiesContext";
 import { useGeolocation } from "../hooks/useGeoLocation";
+import { useUrlPosition } from "../hooks/useUrlPosition";
 
 function Map() {
   const { cities } = useCities();
-  const [searchParams] = useSearchParams();
   const {
     position: geoLocationPosition,
     isLoading: isLoadingPosition,
     getPosition,
   } = useGeolocation();
   const [mapPosition, setMapPosition] = useState([51.505, -0.09]);
-  const lat = searchParams.get("lat");
-  const lng = searchParams.get("lng");
+  const { lat, lng } = useUrlPosition();
 
   useEffect(() => {
     if (lat && lng) {
@@ -87,7 +86,7 @@ function DetectClick() {
 }
 
 ChangeCenter.propTypes = {
-  mapPosition: propTypes.object.isRequired,
+  mapPosition: propTypes.array.isRequired,
 };
 
 export default Map;

@@ -1,17 +1,40 @@
-// "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=0&longitude=0"
+import { useEffect, useState } from "react";
 
-import { useState } from 'react';
+import styles from "./Form.module.css";
+import Button from "./Button";
+import { useNavigate } from "react-router-dom";
+import { useUrlPosition } from "../hooks/useUrlPosition";
 
-import styles from './Form.module.css';
-import Button from './Button';
-import { useNavigate } from 'react-router-dom';
+const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
 function Form() {
-  const [cityName, setCityName] = useState('');
-  // const [country, setCountry] = useState("");
+  const [isLoadingGeocoding, setIsLoadingGeocoding] = useState(false);
+  const [cityName, setCityName] = useState("");
+  const [country, setCountry] = useState("");
   const [date, setDate] = useState(new Date());
-  const [notes, setNotes] = useState('');
+  const [notes, setNotes] = useState("");
+  const [lat, lng] = useUrlPosition();
   const navigator = useNavigate();
+
+  console.log(country, isLoadingGeocoding);
+
+  useEffect(() => {
+    async function fetchCitiesData() {
+      try {
+        setIsLoadingGeocoding(true);
+        const res = await fetch(`${BASE_URL}?latitude=${lat}&longitude=${lng}`);
+        const data = await res.json();
+        setCityName(data.city || data.locality || "");
+        setCountry(data.country);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setIsLoadingGeocoding(false);
+      }
+    }
+
+    fetchCitiesData();
+  }, [lat, lng]);
 
   return (
     <form className={styles.form}>
