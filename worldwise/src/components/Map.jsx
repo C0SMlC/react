@@ -85,6 +85,29 @@ function DetectClick() {
   });
 }
 
+// function DetectClick() {
+//   const navigate = useNavigate();
+//   const map = useMap();
+
+//   useEffect(() => {
+//     const clickHandler = (e) => {
+//       const lat = e.latlng.lat;
+//       const lng = e.latlng.lng;
+//       navigate(`/app/form?lat=${lat}&lng=${lng}`);
+//     };
+
+//     // Add event listener for click event
+//     map.on("click", clickHandler);
+
+//     // Cleanup listener on component unmount
+//     return () => {
+//       map.off("click", clickHandler);
+//     };
+//   }, [map, navigate]); // Add map and navigate to the dependency array
+
+//   return null;
+// }
+
 ChangeCenter.propTypes = {
   mapPosition: propTypes.array.isRequired,
 };
