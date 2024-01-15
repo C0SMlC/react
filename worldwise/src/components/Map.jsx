@@ -1,115 +1,99 @@
-import { useEffect, useState } from "react";
-import propTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import propTypes from "prop-types";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMap,
+  useMapEvents,
+} from "react-leaflet";
 
 import styles from "./Map.module.css";
-
-import Button from "./Button";
-
+import { useEffect, useState } from "react";
 import { useCities } from "../contexts/CitiesContext";
-import { useGeolocation } from "../hooks/useGeoLocation";
+import { useGeolocation } from "../hooks/useGeolocation";
 import { useUrlPosition } from "../hooks/useUrlPosition";
+import Button from "./Button";
 
 function Map() {
   const { cities } = useCities();
+  const [mapPosition, setMapPosition] = useState(["40", "0"]);
   const {
-    position: geoLocationPosition,
     isLoading: isLoadingPosition,
+    position: geolocationPosition,
     getPosition,
   } = useGeolocation();
-  const [mapPosition, setMapPosition] = useState([51.505, -0.09]);
-  const { lat, lng } = useUrlPosition();
+  const [mapLat, mapLng] = useUrlPosition();
 
-  useEffect(() => {
-    if (lat && lng) {
-      setMapPosition([lat, lng]);
-    }
-  }, [lat, lng]);
+  useEffect(
+    function () {
+      if (mapLat && mapLng) setMapPosition([mapLat, mapLng]);
+    },
+    [mapLat, mapLng]
+  );
 
-  useEffect(() => {
-    if (geoLocationPosition) {
-      setMapPosition([geoLocationPosition.lat, geoLocationPosition.lng]);
-    }
-  }, [geoLocationPosition]);
+  useEffect(
+    function () {
+      if (geolocationPosition)
+        setMapPosition([geolocationPosition.lat, geolocationPosition.lng]);
+    },
+    [geolocationPosition]
+  );
 
   return (
     <div className={styles.mapContainer}>
-      {!geoLocationPosition && (
+      {!geolocationPosition && (
         <Button type="position" onClick={getPosition}>
-          {isLoadingPosition ? "Loading..." : "Use current position"}
+          {isLoadingPosition ? "Loading..." : "Use your position"}
         </Button>
       )}
+
       <MapContainer
         center={mapPosition}
-        zoom={10}
+        zoom={6}
         scrollWheelZoom={true}
         className={styles.map}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
         />
         {cities.map((city) => (
           <Marker
-            position={{ lat: city.position.lat, lng: city.position.lng }}
+            position={[city.position.lat, city.position.lng]}
             key={city.id}
           >
             <Popup>
-              A pretty CSS3 popup. <br /> Easily customizable.
+              <span>{city.emoji}</span> <span>{city.cityName}</span>
             </Popup>
           </Marker>
         ))}
 
-        <ChangeCenter mapPosition={mapPosition} />
+        <ChangeCenter position={mapPosition} />
         <DetectClick />
       </MapContainer>
     </div>
   );
 }
 
-function ChangeCenter({ mapPosition }) {
+function ChangeCenter({ position }) {
+  console.log("change Center", position);
   const map = useMap();
-  map.setView(mapPosition);
+  map.setView(position);
   return null;
 }
 
 function DetectClick() {
-  const navigator = useNavigate();
+  const navigate = useNavigate();
 
-  const map = useMap();
-  map.on("click", (e) => {
-    const lat = e.latlng.lat;
-    const lng = e.latlng.lng;
-    navigator(`/app/form?lat=${lat}&lng=${lng}`);
+  useMapEvents({
+    click: (e) => navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`),
   });
 }
 
-// function DetectClick() {
-//   const navigate = useNavigate();
-//   const map = useMap();
-
-//   useEffect(() => {
-//     const clickHandler = (e) => {
-//       const lat = e.latlng.lat;
-//       const lng = e.latlng.lng;
-//       navigate(`/app/form?lat=${lat}&lng=${lng}`);
-//     };
-
-//     // Add event listener for click event
-//     map.on("click", clickHandler);
-
-//     // Cleanup listener on component unmount
-//     return () => {
-//       map.off("click", clickHandler);
-//     };
-//   }, [map, navigate]); // Add map and navigate to the dependency array
-
-//   return null;
-// }
-
 ChangeCenter.propTypes = {
-  mapPosition: propTypes.array.isRequired,
+  position: propTypes.arrayOf(propTypes.string).isRequired,
 };
 
 export default Map;

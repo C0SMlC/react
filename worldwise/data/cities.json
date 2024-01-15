@@ -35,6 +35,102 @@
         "lng": 13.376933665713324
       },
       "id": 98443197
+    },
+    {
+      "cityName": "London",
+      "country": "United Kingdom of Great Britain and Northern Ireland (the)",
+      "emoji": "🇬🇧",
+      "date": "2024-01-15T06:15:42.777Z",
+      "notes": "",
+      "position": {
+        "lat": "51.635066908847826",
+        "lng": "-0.22247314453125"
+      },
+      "id": 98443198
+    },
+    {
+      "cityName": "London",
+      "country": "United Kingdom of Great Britain and Northern Ireland (the)",
+      "emoji": "🇬🇧",
+      "date": "2024-01-15T06:16:11.593Z",
+      "notes": "",
+      "position": {
+        "lat": "51.58048319830537",
+        "lng": "-0.006866455078125001"
+      },
+      "id": 98443199
+    },
+    {
+      "cityName": "Welwyn Garden City",
+      "country": "United Kingdom of Great Britain and Northern Ireland (the)",
+      "emoji": "🇬🇧",
+      "date": "2024-01-15T06:19:06.631Z",
+      "notes": "",
+      "position": {
+        "lat": "51.73298216429908",
+        "lng": "-0.11535644531250001"
+      },
+      "id": 98443200
+    },
+    {
+      "cityName": "Dorking",
+      "country": "United Kingdom of Great Britain and Northern Ireland (the)",
+      "emoji": "🇬🇧",
+      "date": "2024-01-15T06:19:11.729Z",
+      "notes": "",
+      "position": {
+        "lat": "51.319455404749775",
+        "lng": "-0.32272338867187506"
+      },
+      "id": 98443201
+    },
+    {
+      "cityName": "London",
+      "country": "United Kingdom of Great Britain and Northern Ireland (the)",
+      "emoji": "🇬🇧",
+      "date": "2024-01-15T06:22:30.267Z",
+      "notes": "",
+      "position": {
+        "lat": "51.61545844207288",
+        "lng": "-0.29113769531250006"
+      },
+      "id": 98443202
+    },
+    {
+      "cityName": "Dorking",
+      "country": "United Kingdom of Great Britain and Northern Ireland (the)",
+      "emoji": "🇬🇧",
+      "date": "2024-01-15T06:22:35.648Z",
+      "notes": "",
+      "position": {
+        "lat": "51.25761789054247",
+        "lng": "-0.358428955078125"
+      },
+      "id": 98443203
+    },
+    {
+      "cityName": "Katol",
+      "country": "India",
+      "emoji": "🇮🇳",
+      "date": "2024-01-15T06:23:24.376Z",
+      "notes": "",
+      "position": {
+        "lat": "21.12549763660629",
+        "lng": "78.57421875000001"
+      },
+      "id": 98443204
+    },
+    {
+      "cityName": "Gulf of Khambhat",
+      "country": "India",
+      "emoji": "🇮🇳",
+      "date": "2024-01-15T06:23:55.255Z",
+      "notes": "",
+      "position": {
+        "lat": "20.097206227083888",
+        "lng": "72.29003906250001"
+      },
+      "id": 98443205
     }
   ]
 }

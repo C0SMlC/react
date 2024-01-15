@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import DatePicker from "react-datepicker";
 
 import { useUrlPosition } from "../hooks/useUrlPosition";
+import { useCities } from "../contexts/CitiesContext";
 
 import styles from "./Form.module.css";
 
@@ -28,12 +30,14 @@ function Form() {
   const [lat, lng] = useUrlPosition();
   const [emoji, setEmoji] = useState("");
   const [geocodingError, setGeocodingError] = useState("");
+  const { createCity, isLoading } = useCities();
 
   const navigator = useNavigate();
 
   console.log(country, isLoadingGeocoding);
 
   useEffect(() => {
+    if (!lat || !lng) return;
     async function fetchCitiesData() {
       try {
         setIsLoadingGeocoding(true);
@@ -58,13 +62,39 @@ function Form() {
     fetchCitiesData();
   }, [lat, lng]);
 
+  function handleFormSubmit(e) {
+    e.preventDefault();
+
+    if (!cityName || !date) return;
+
+    const newCity = {
+      cityName,
+      country,
+      emoji,
+      date,
+      notes,
+      position: { lat, lng },
+    };
+
+    createCity(newCity).then(() => navigator("/app/cities"));
+  }
+
+  if (!lat || !lng) {
+    return (
+      <Message message="Please select a location on the map to add a new city 😁" />
+    );
+  }
+
   if (isLoadingGeocoding) {
     return <Spinner />;
   }
   return geocodingError ? (
     <Message message={geocodingError} />
   ) : (
-    <form className={styles.form}>
+    <form
+      className={`${styles.form} ${isLoading ? styles.loading : ""}`}
+      onSubmit={handleFormSubmit}
+    >
       <div className={styles.row}>
         <label htmlFor="cityName">City name</label>
         <input
@@ -77,10 +107,11 @@ function Form() {
 
       <div className={styles.row}>
         <label htmlFor="date">When did you go to {cityName}?</label>
-        <input
+        <DatePicker
           id="date"
-          onChange={(e) => setDate(e.target.value)}
-          value={date}
+          selected={date}
+          onChange={(date) => setDate(date)}
+          dateFormat="dd/MM/yyyy"
         />
       </div>
 
@@ -99,7 +130,7 @@ function Form() {
           type="back"
           onClick={(e) => {
             e.preventDefault();
-            navigator(-1);
+            navigator("/app/cities");
           }}
         >
           &larr; Back
