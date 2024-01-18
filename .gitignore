@@ -2,6 +2,7 @@
 
 # dependencies
 /react-quiz-new/node_modules
+/understanding-useReducer-hook/node_modules
 /atomic-blog/starter/node_modules
 /atomic-blog/final/node_modules
 

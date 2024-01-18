@@ -34,7 +34,21 @@ function CitiesProvider({ children }) {
 
       const data = await res.json();
       setCities([...cities, data]);
-      console.log(data);
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function deleteCity(id) {
+    try {
+      setIsLoading(true);
+      await fetch(`${BASE_URL}/cities/${id}`, {
+        method: "DELETE",
+      });
+
+      setCities(cities.filter((city) => city.id !== id));
     } catch (error) {
       alert(error.message);
     } finally {
@@ -61,7 +75,14 @@ function CitiesProvider({ children }) {
 
   return (
     <CitiesContext.Provider
-      value={{ cities, isLoading, currentCity, fetchCity, createCity }}
+      value={{
+        cities,
+        isLoading,
+        currentCity,
+        fetchCity,
+        createCity,
+        deleteCity,
+      }}
     >
       {children}
     </CitiesContext.Provider>
@@ -83,4 +104,4 @@ CitiesProvider.propTypes = {
   children: propTypes.node.isRequired,
 };
 
-export { useCities, CitiesProvider };
+export { useCities, CitiesProvider }; 
