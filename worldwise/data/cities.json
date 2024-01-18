@@ -1,3 +1,28 @@
 {
-  "cities": []
+  "cities": [
+    {
+      "cityName": "Mayorga",
+      "country": "Spain",
+      "emoji": "🇪🇸",
+      "date": "2024-01-18T11:20:11.222Z",
+      "notes": "sqqs",
+      "position": {
+        "lat": "42.114523952464275",
+        "lng": "-5.361328125"
+      },
+      "id": 1
+    },
+    {
+      "cityName": "Guadalajara",
+      "country": "Spain",
+      "emoji": "🇪🇸",
+      "date": "2024-01-18T11:20:21.897Z",
+      "notes": "wqw\n",
+      "position": {
+        "lat": "40.66397287638688",
+        "lng": "-3.27392578125"
+      },
+      "id": 2
+    }
+  ]
 }
