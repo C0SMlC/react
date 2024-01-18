@@ -1,16 +1,3 @@
 {
-  "cities": [
-    {
-      "cityName": "Quintanilla de Onesimo",
-      "country": "Spain",
-      "emoji": "🇪🇸",
-      "date": "2024-01-18T05:51:49.914Z",
-      "notes": "ma",
-      "position": {
-        "lat": "41.623655390686395",
-        "lng": "-4.328613281250001"
-      },
-      "id": 1
-    }
-  ]
+  "cities": []
 }

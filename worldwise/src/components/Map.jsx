@@ -78,7 +78,6 @@ function Map() {
 }
 
 function ChangeCenter({ position }) {
-  console.log("change Center", position);
   const map = useMap();
   map.setView(position);
   return null;

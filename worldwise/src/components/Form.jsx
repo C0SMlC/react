@@ -34,8 +34,6 @@ function Form() {
 
   const navigator = useNavigate();
 
-  console.log(country, isLoadingGeocoding);
-
   useEffect(() => {
     if (!lat || !lng) return;
     async function fetchCitiesData() {
