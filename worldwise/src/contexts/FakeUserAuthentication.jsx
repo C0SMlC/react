@@ -1,31 +1,85 @@
-import { useContext, createContext } from "react";
-import propTypes from "prop-types";
+import { useContext, createContext, useReducer } from "react";
+import PropTypes from "prop-types";
 
-const FakeUserAuthenticationContext = createContext();
+const UserAuthenticationContext = createContext();
 
-function FakeUserAuthenticationProvider({ children }) {
+// Initialize the authentication state
+const INITIAL_STATE = {
+  user: {},
+  isAuthenticated: false,
+};
+
+// Define the fake user
+const FAKE_USER = {
+  name: "Jack",
+  email: "jack@example.com",
+  password: "qwerty",
+  avatar: "https://i.pravatar.cc/100?u=zz",
+};
+
+// Define the reducer function for updating the authentication state
+function reducer(state, action) {
+  switch (action.type) {
+    case "login":
+      return {
+        ...state,
+        user: action.payload,
+        isAuthenticated: true,
+      };
+    case "logout":
+      return {
+        ...state,
+        user: null,
+        isAuthenticated: false,
+      };
+    default:
+      throw new Error(`Unrecognized action: ${action.type}`);
+  }
+}
+
+function UserAuthenticationProvider({ children }) {
+  // Initialize the authentication state using the reducer
+  const [{ user, isAuthenticated }, dispatch] = useReducer({
+    reducer,
+    INITIAL_STATE,
+  });
+
+  // Define the login function
+  function login(email, password) {
+    if (email === FAKE_USER.email && password === FAKE_USER.password) {
+      dispatch({ type: "login", payload: FAKE_USER }); // Update the authentication state
+    }
+  }
+
+  // Define the logout function
+  function logout() {
+    dispatch({ type: "logout" }); // Update the authentication state
+  }
+
+  // Provide the authentication state to the component tree
   return (
-    <FakeUserAuthenticationContext.Provider>
+    <UserAuthenticationContext.Provider
+      value={{ user, isAuthenticated, login, logout }}
+    >
       {children}
-    </FakeUserAuthenticationContext.Provider>
+    </UserAuthenticationContext.Provider>
   );
 }
 
-function useFakeUserAuthentication() {
-  const context = useContext(FakeUserAuthenticationContext);
+UserAuthenticationProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+function useUserAuthentication() {
+  const context = useContext(UserAuthenticationContext);
 
   if (context === undefined) {
     throw new Error(
-      "useFakeUserAuthentication must be used within a CitiesProvider"
+      "useUserAuthentication must be used within a UserAuthenticationProvider"
     );
   }
 
   return context;
 }
 
-// prop validation
-FakeUserAuthenticationProvider.propTypes = {
-  children: propTypes.node.isRequired,
-};
-
-export { useFakeUserAuthentication, FakeUserAuthenticationProvider };
+export { useUserAuthentication, UserAuthenticationProvider };
