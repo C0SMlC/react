@@ -39,10 +39,10 @@ function reducer(state, action) {
 
 function UserAuthenticationProvider({ children }) {
   // Initialize the authentication state using the reducer
-  const [{ user, isAuthenticated }, dispatch] = useReducer({
+  const [{ user, isAuthenticated }, dispatch] = useReducer(
     reducer,
-    INITIAL_STATE,
-  });
+    INITIAL_STATE
+  );
 
   // Define the login function
   function login(email, password) {

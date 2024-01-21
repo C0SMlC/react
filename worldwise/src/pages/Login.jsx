@@ -4,7 +4,7 @@ import styles from "./Login.module.css";
 
 import PageNav from "../components/PageNav";
 
-import { useUserAuthentication } from "../contexts/UserAuthenticationContext";
+import { useUserAuthentication } from "../contexts/FakeUserAuthentication";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
@@ -22,6 +22,7 @@ export default function Login() {
 
   function handleSubmit(e) {
     e.preventDefault();
+    if (!email || !password) return;
     login(email, password);
   }
   return (
