@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import styles from "./Login.module.css";
 
 import PageNav from "../components/PageNav";
+import Button from "../components/Button";
 
 import { useUserAuthentication } from "../contexts/FakeUserAuthentication";
 import { useNavigate } from "react-router-dom";
@@ -50,7 +51,7 @@ export default function Login() {
         </div>
 
         <div>
-          <button>Login</button>
+          <Button type="primary">Login</Button>
         </div>
       </form>
     </main>
