@@ -1,7 +1,11 @@
-import React from 'react';
-import Options from './Options';
+import React from "react";
+import Options from "./Options";
+import { useQuiz } from "../contexts/useQuiz";
 
-function Question({ currentQuestion, handleAnswer, answer }) {
+function Question() {
+  const { index, questions, handleAnswer, answer } = useQuiz();
+  const currentQuestion = questions[index];
+
   return (
     <div>
       <h4>{currentQuestion.question}</h4>

@@ -1,12 +1,16 @@
-import React from 'react';
+import React from "react";
+import { useQuiz } from "../contexts/useQuiz";
 
-function Button({ answer, dispatch, maxQuestions, status, index }) {
+function Button() {
+  const { answer, dispatch, questions, status, index } = useQuiz();
+  const maxQuestions = questions.length;
+
   return (
     <>
-      {answer !== null && status !== 'finish' && index === maxQuestions - 1 ? (
+      {answer !== null && status !== "finish" && index === maxQuestions - 1 ? (
         <button
           className="btn btn-ui"
-          onClick={() => dispatch({ type: 'finish' })}
+          onClick={() => dispatch({ type: "finish" })}
         >
           Finish
         </button>
@@ -15,16 +19,16 @@ function Button({ answer, dispatch, maxQuestions, status, index }) {
       {answer !== null && index < maxQuestions - 1 ? (
         <button
           className="btn btn-ui"
-          onClick={() => dispatch({ type: 'nextQuestion' })}
+          onClick={() => dispatch({ type: "nextQuestion" })}
         >
           Next
         </button>
       ) : null}
 
-      {status === 'finish' ? (
+      {status === "finish" ? (
         <button
           className="btn btn-ui"
-          onClick={() => dispatch({ type: 'restart', payload: 0 })}
+          onClick={() => dispatch({ type: "restart", payload: 0 })}
         >
           Restart
         </button>

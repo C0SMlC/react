@@ -1,6 +1,8 @@
-import React from 'react';
+import React from "react";
+import { useQuiz } from "../contexts/useQuiz";
 
-function FinishScreen({ points, maxPoints }) {
+function FinishScreen() {
+  const { points, maxPoints } = useQuiz();
   return (
     <p className="result">
       You scored <strong>{points}</strong> out of {maxPoints}(
