@@ -23,7 +23,6 @@ function City() {
   //   notes: 'My favorite city so far!',
   // };
   const { currentCity, fetchCity, isLoading } = useCities();
-  console.log(isLoading);
 
   const { cityName, emoji, date, notes } = currentCity;
 
@@ -31,7 +30,7 @@ function City() {
 
   useEffect(() => {
     fetchCity(id);
-  }, [id]);
+  }, [id, fetchCity]);
 
   return isLoading ? (
     <Spinner />
