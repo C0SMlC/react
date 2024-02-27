@@ -26,18 +26,19 @@ function Calculator({ workouts, allowSound }) {
     [number, sets, speed, durationBreak]
   );
 
-  useEffect(
-    function () {
-      const playSound = function () {
-        if (!allowSound) return;
-        const sound = new Audio(clickSound);
-        sound.play();
-      };
 
-      playSound();
-    },
-    [duration, allowSound]
-  );
+  useEffect(() => {
+    const playSound = function () {
+      if (!allowSound || !isMounted()) return; // Check if component is mounted
+
+      const sound = new Audio(clickSound);
+      sound
+        .play()
+        .catch((error) => console.error("Error playing sound:", error.message));
+    };
+
+    playSound();
+  }, [duration, allowSound]);
 
   return (
     <>
