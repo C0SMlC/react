@@ -1,9 +1,15 @@
-import { createStore } from "redux";
+import { combineReducers, createStore } from "redux";
 
-const initialState = {
+const initialStateAccount = {
   balance: 0,
   loan: 0,
   loanPurpose: "",
+};
+
+const initialStateCustomer = {
+  fullName: "",
+  nationalId: "",
+  createdAt: "",
 };
 
 // What is redux in simple way?
@@ -12,7 +18,7 @@ const initialState = {
 
 // Pass in the default state if the initial state is undefined
 // action is a javascript object that contains the type and payload
-function reducer(state = initialState, action) {
+function reducerAccount(state = initialStateAccount, action) {
   switch (action.type) {
     case "account/deposit":
       return {
@@ -53,7 +59,33 @@ function reducer(state = initialState, action) {
   }
 }
 
-const store = createStore(reducer);
+function reducerCustomer(state = initialStateCustomer, action) {
+  switch (action.type) {
+    case "customer/create":
+      return {
+        ...state,
+        fullName: action.payload.fullName,
+        nationalId: action.payload.nationalId,
+        createdAt: action.payload.createdAt,
+      };
+
+    case "customer/update":
+      return {
+        ...state,
+        fullName: action.payload.fullName,
+      };
+
+    default:
+      return state;
+  }
+}
+
+const rootReducer = combineReducers({
+  account: reducerAccount,
+  customer: reducerCustomer,
+});
+
+const store = createStore(rootReducer);
 
 function deposit(amount) {
   return {
@@ -97,13 +129,39 @@ console.log(store.getState());
 store.dispatch(repay());
 console.log(store.getState());
 
+function createCustomer(fullName, nationalId) {
+  return {
+    type: "customer/create",
+    payload: {
+      fullName,
+      nationalId,
+      createdAt: new Date().toISOString(),
+    },
+  };
+}
+
+function updateCustomer(fullName) {
+  return {
+    type: "customer/update",
+    payload: {
+      fullName,
+    },
+  };
+}
+
+store.dispatch(createCustomer("John Doe", "123456789"));
+console.log(store.getState());
+
+store.dispatch(updateCustomer("Pratik Doe"));
+console.log(store.getState());
+
 // store.dispatch({
 //   type: "account/deposit",
 //   payload: 500,
 // });
 // console.log(store.getState());
 
-// store.dispatch({
+// store.dispatch({s
 //   type: "account/withdraw",
 //   payload: 100,
 // });
