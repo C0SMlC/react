@@ -6,19 +6,23 @@ import Cart from "./features/cart/Cart";
 import CreateOrder from "./features/order/CreateOrder";
 import Order from "./features/order/Order";
 import AppLayout from "./ui/AppLayout";
+import Error from "./ui/Error";
 
 const router = createBrowserRouter([
   {
     element: <AppLayout />,
+    errorElement: <Error />,
     children: [
       {
         path: "/",
         element: <Home />,
       },
       {
+        // ErrorElement is here because menu component is fetching some data from the api so chances are high it might fail and the error generating from there we dont want to show it like other errors with taking the entire page instead we want it to be limited with showing other part sucb as the heder and the footer
         path: "/menu",
         element: <Menu />,
         loader: menuLoader,
+        errorElement: <Error />,
       },
       {
         path: "/cart",
