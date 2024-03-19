@@ -1,4 +1,8 @@
+/* eslint-disable react-refresh/only-export-components */
 // import { useState } from "react";
+
+import { Form, redirect } from "react-router-dom";
+import { createOrder } from "../../services/apiRestaurant";
 
 // https://uibakery.io/regex-library/phone-number
 // const isValidPhone = (str) =>
@@ -38,7 +42,7 @@ function CreateOrder() {
     <div>
       <h2>Ready to order? Lets go!</h2>
 
-      <form>
+      <Form method="POST">
         <div>
           <label>First Name</label>
           <input type="text" name="customer" required />
@@ -67,14 +71,32 @@ function CreateOrder() {
             // onChange={(e) => setWithPriority(e.target.checked)}
           />
           <label htmlFor="priority">Want to yo give your order priority?</label>
+
+          <input type="hidden" name="cart" value={JSON.stringify(fakeCart)} />
         </div>
 
         <div>
           <button>Order now</button>
         </div>
-      </form>
+      </Form>
     </div>
   );
+}
+
+export async function action({ request }) {
+  const formData = await request.formData();
+  const data = Object.fromEntries(formData);
+
+  const order = {
+    ...data,
+    cart: JSON.parse(data.cart),
+    priority: data.priority === "on",
+  };
+
+  const newOrder = await createOrder(order);
+
+  console.log(newOrder);
+  return redirect(`/order/${newOrder.id}`);
 }
 
 export default CreateOrder;
